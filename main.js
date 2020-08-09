@@ -192,14 +192,14 @@ const filter = function (req, file, cb) {
     }
 }
 
-const multerStorage = multer.diskStorage({  
-        destination: function (req, file, cb) {
-          cb(null, "./public/uploads/")
-        },
-        filename: (req, file, cb) => {
-            cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
-      }
-    })
+// const multerStorage = multer.diskStorage({  
+//         destination: function (req, file, cb) {
+//           cb(null, "./public/uploads/")
+//         },
+//         filename: (req, file, cb) => {
+//             cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
+//       }
+//     })
 
 const upload = multer({
 
