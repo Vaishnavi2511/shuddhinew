@@ -18,7 +18,7 @@ const ObjectId = Schema.ObjectId;
 var multer = require('multer')
 var path = require('path')
 const cryto = require("crypto");
-var storage = multer.diskStorage({
+var storage = multer({
     destination: "./public/uploads/",
     filename: (req, file, cb) => {
         cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
@@ -587,11 +587,11 @@ const MemberSchema = new Schema({
         required:true,
         type: String
     },
-    idNumber:{
-        type:String,
-        required:true,
-        unique:true
-    },
+    // idNumber:{
+    //     type:String,
+    //     required:true,
+    //     unique:true
+    // },
     interests:{
         type:Array,
         required:true
@@ -616,10 +616,7 @@ const MemberSchema = new Schema({
     certimem:{
         type:String
     },
-    pan:{
-        type:String,
-        default:" "
-    },
+   
 
     resetToken:String,
     resetTokenExpires: Date
@@ -987,7 +984,7 @@ router.post('/registermember', urlencodedParser, singleupload, function (req, re
             newMember.cnfrmpassword = req.body.cnfrmpassword;
             newMember.cityName = req.body.cityname;
             newMember.address = req.body.address;
-            newMember.idNumber = req.body.aadhaar;
+            
             newMember.interests = req.body.intrest;
             newMember.acname = req.body.acname;
             newMember.acno = req.body.acno;
@@ -1071,7 +1068,7 @@ router.post('/registervolunteer', urlencodedParser, singleupload , function (req
             newMember.password = req.body.password;
             newMember.cityName = req.body.cityname;
             newMember.address = req.body.address;
-            newMember.idNumber = req.body.aadhaar;
+          
             newMember.interests = req.body.intrest;
             newMember.cnfrmpassword = req.body.cnfrmpassword;
             newMember.role = req.body.role;
@@ -2636,7 +2633,7 @@ router.post('/member', checkLogIn, urlencodedParser, singleupload, (req, res) =>
             newMember.cnfrmpassword = w.password;
             newMember.cityName = req.body.cityname;
             newMember.address = w.address;
-            newMember.idNumber = req.body.aadhaar;
+            // newMember.idNumber = req.body.aadhaar;
             newMember.interests = req.body.intrest;
 
             newMember.save()
@@ -2693,7 +2690,7 @@ router.post('/volunteer', urlencodedParser, singleupload, function (req, res) {
             newMember.password = w.password;
             newMember.cityName = req.body.cityname;
             newMember.address = w.address;
-            newMember.idNumber = req.body.aadhaar;
+            // newMember.idNumber = req.body.aadhaar;
             newMember.interests = req.body.intrest;
             newMember.cnfrmpassword = w.cnfrmpassword;
             newMember.role = req.body.role;
@@ -2755,7 +2752,7 @@ router.post('/mem', checkLogIn, urlencodedParser, singleupload, (req, res) => {
             newMember.cnfrmpassword = v.cnfrmpassword;
             newMember.cityName = v.cityname;
             newMember.address = v.address;
-            newMember.idNumber = v.idNumber;
+            // newMember.idNumber = v.idNumber;
             newMember.interests = v.interests;
             newMember.images = v.images;
             newMember.logo = v.logo;

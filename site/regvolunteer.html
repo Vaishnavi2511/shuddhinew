@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="">
 <head>
+    <title>Register as a Volunteer</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <link rel="icon" href="https://d2aq6dqxahe4ka.cloudfront.net/assets/uploads/beneficiary/-2069379359625602049.png" type="image/x-icon">
 </head>
     
     
@@ -14,7 +15,6 @@
 *:after {
   box-sizing: border-box;
 }
-
 body {
   padding: 1em;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -27,8 +27,6 @@ body {
   background-attachment: fixed;
   
   background-size: cover;}
-
-
 h4 {
   color: white;
   font-family: sans-serif;
@@ -38,11 +36,9 @@ h4 {
   color: white;
   opacity: 0.5; /* Firefox */
 }
-
 :-ms-input-placeholder { /* Internet Explorer 10-11 */
  color: white;
 }
-
 ::-ms-input-placeholder { /* Microsoft Edge */
  color: white;
 }
@@ -170,7 +166,7 @@ select option {
   position: relative;
 }
 .input-group-icon input {
-  padding-left: 4.4em;
+  padding-left: 1em;
 }
 .input-group-icon .input-icon {
   position: absolute;
@@ -257,7 +253,6 @@ select option {
   margin: 4px 2px;
   cursor: pointer;
 }
-
     
     </style>
 
@@ -265,92 +260,88 @@ select option {
     
     
 <div class="container">
-  <form>
+  <form method = "post" enctype="multipart/form-data">
+    <% if(locals.message){ %>
+      <script>
+      alert("<%=message %>");
+    </script>
+      <% } %>
     <div class="row">
-      <h4 style="text-align: center; font-size: 1.2em">REGISTER AS A MEMBER</h4>
+      <h4 style="text-align: center; font-size: 1.2em">REGISTER AS A VOLUNTEER</h4>
       <div class="input-group input-group-icon">
           
         <input type="text" name="name" style="color: white" placeholder="Full Name"/>
-        <div class="input-icon"><i class="fa fa-user"></i></div>
+        
       </div>
       <div class="input-group input-group-icon">
         <input type="email" name="email" style="color: white" placeholder="Email Adress"/>
-        <div class="input-icon"><i class="fa fa-envelope"></i></div>
+        
       </div>
         
         <div class="input-group input-group-icon">
-        <input type="password" name="password" style="color: white" placeholder="create your password"/>
-        <div class="input-icon"><i class="fa fa-envelope"></i></div>
+        <input type="password" name="password" style="color: white" placeholder="Create your password"/>
+        
       </div>
         
         <div class="input-group input-group-icon">
-        <input type="password" name="cnfrmpassword" style="color: white" placeholder="confirm password"/>
-        <div class="input-icon"><i class="fa fa-envelope"></i></div>
+        <input type="password" name="cnfrmpassword" style="color: white" placeholder="Confirm password"/>
+        
       </div>
         
       <div class="input-group input-group-icon">
-        <input type="number" name="phone" style="color: white" placeholder="phone no."/>
-        <div class="input-icon"><i class="fa fa-key"></i></div>
+        <input type="number" name="phone" style="color: white" placeholder="Phone no."/>
+        
       </div>
         
         <div class="input-group input-group-icon">
-        <input type="text" name="cityname" style="color: white" placeholder="city"/>
-        <div class="input-icon"><i class="fa fa-key"></i></div>
+        <input type="text" name="cityname" style="color: white" placeholder="City"/>
+        
       </div>
+                   
         
-        <div class="input-group input-group-icon">
-        <input type="text" name="aadhaar" style="color: white" placeholder="Aadhaar Number/PAN Card/Driving License"/>
-            
         
-        <div class="input-icon"><i class="fa fa-key"></i></div>
-      </div>
-        
+       
          <div class="input-group input-group-icon">
         <input type="text" name="address" style="color: white" placeholder="Address"/>
-        <div class="input-icon"><i class="fa fa-key"></i></div>
+        
       </div>
-    </div>
-    <div class="row">
-      <div class="col-half">
-        <h4>DATE OF BIRTH</h4>
-        <div class="input-group">
-          <div class="col-third">
-            <input type="text" style="color: white" placeholder="DD"/>
-          </div>
-          <div class="col-third">
-            <input type="text" style="color: white" placeholder="MM"/>
-          </div>
-          <div class="col-third">
-            <input type="text" style="color: white" placeholder="YYYY"/>
-          </div>
-        </div>
+      <div class="input-group input-group-icon">
+          
+        <input type="text" name="acname" style="color: white" placeholder="Bank Account Holder Name"/>
+        
       </div>
-      <div class="col-half">
-        <h4>GENDER</h4>
-        <div class="input-group">
-          <input type="radio" name="gender" value="male" id="gender-male"/>
-          <label for="gender-male">Male</label>
-          <input type="radio" name="gender" value="female" id="gender-female"/>
-          <label for="gender-female">Female</label>
-        </div>
+      
+      <div class="input-group input-group-icon">
+        <input type="number" name="acno" style="color: white" placeholder="Account Number"/>
+        
+      </div>
+      
+       <div class="input-group input-group-icon">
+        <input type="text" name="ifsccode" style="color: white" placeholder="IFSC CODE"/>
+        
+      </div>
+      
+      <div class="input-group input-group-icon">
+          
+        <input type="text" name="bankadd" style="color: white" placeholder="Branch Address"/>
+        
       </div>
     </div>
      
     <h4>YOUR ROLE AT THE NGO</h4><br>
-    <input type="checkbox" id="volu" name="volu" value="volu"/>
+    <input type="checkbox" id="volu" name="role" value="volu"/>
     <label for="volu">Volunteer</label>
-    <input type="checkbox" id="work" name="work" value="work"/>
+    <input type="checkbox" id="work" name="role" value="work"/>
     <label for="work">Work</label>
-    <input type="checkbox" id="fund" name="fund" value="fund"/>
+    <input type="checkbox" id="fund" name="role" value="fund"/>
     <label for="fund">Raise Fund</label>
-    <input type="checkbox" id="part" name="part" value="part"/>
+    <input type="checkbox" id="part" name="role" value="part"/>
     <label for="part">Partner</label>
-    <input type="checkbox" id="don" name="don" value="don"/>
+    <input type="checkbox" id="don" name="role" value="don"/>
     <label for="don">Donate</label>
-    <input type="checkbox" id="mem" name="mem" value="mem"/>
-    
+    <input type="checkbox" id="int" name="role" value="mem"/>
     <label for="int">Intern</label>
-    <input type="checkbox" id="oth" name="oth" value="oth"/>
+    <input type="checkbox" id="oth" name="role" value="oth"/>
     <label for="oth">Other</label>
    
       
@@ -372,7 +363,7 @@ select option {
     <input type="checkbox" id="vol" name="vol" value="vol"/>
     <label for="vol">Other</label>
       
-    <h4>YOUR INTREST</h4><br>
+    <h4>YOUR INTEREST</h4><br>
     <input type="checkbox" id="ad" name="intrest" value="ad"/>
     <label for="ad">Administration</label>
     <input type="checkbox" id="eve" name="intrest" value="eve"/>
@@ -394,6 +385,7 @@ select option {
     <input type="checkbox" id="buss" name="intrest" value="buss"/>
     <label for="buss">Business Coordination</label>
    
+    
     <div class="row">
       <h4>Terms and Conditions</h4>
       <div class="input-group">
@@ -401,8 +393,9 @@ select option {
         <label for="terms">I accept the terms and conditions for signing up to this service, and hereby confirm I have read the privacy policy.</label>
       </div>
     </div>
-  </form>
     <button class="buttonss ">Submit</button>
+
+  </form>
 </div>
     
 </body>
