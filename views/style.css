@@ -6915,8 +6915,8 @@ html:not(.ie-11):not(.ios) .parallax-disabled {
   }
   @media(max-width: 320px){
 	.brand-logo-light{
-	  width:80px;
-	  height:30px;
+	  width:60px;
+	  height:20px;
 	}
   }
   @media(min-width:576px){
