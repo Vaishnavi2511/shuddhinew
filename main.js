@@ -18,7 +18,7 @@ const ObjectId = Schema.ObjectId;
 var multer = require('multer')
 var path = require('path')
 const cryto = require("crypto");
-var storage = multer({
+var storage = multer.diskStorage({
     destination: "./public/uploads/",
     filename: (req, file, cb) => {
         cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
