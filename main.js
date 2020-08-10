@@ -2839,14 +2839,101 @@ router.get("/imageupload", checkLogIn, (req, res) => {
 })
 router.post('/imageupload', uploadLogoHandler, uploadlogo , urlencodedParser, checkLogIn, (req, res) => {
     const userpath = req.files.logo[0].path.split("\\").splice(1).join("/");
-    User.update({ email: req.session.work.email }, { logo: userpath }, function (err, writeOpResult) {
+    User.findOne({ email: req.session.work.email }, function (err, doc) {
         if (err) {
-            console.log(err.message, 'error')
+            console.log(err, 'error')
+            res.redirect('/')
             return
         }
-        req.session.work.logo = userpath;
-        res.redirect('/main/welcome');
-    });
+        if (_.isEmpty(doc)) {
+            Gov.findOne({ email: req.session.work.email }, function (err, doc) {
+                if (err) {
+                    console.log(err, 'error')
+                    res.redirect('/')
+                    return
+                }
+                if (_.isEmpty(doc)) {
+                    Member.findOne({ email: req.session.work.email }, function (err, doc) {
+                        if (err) {
+                            console.log(err, 'error')
+                            res.redirect('/')
+                            return
+                        }
+                        if (_.isEmpty(doc)) {
+                            Volunteer.findOne({ email:req.session.work.email }, function (err, doc) {
+                                if (err) {
+                                    console.log(err, 'error')
+                                    res.redirect('/')
+                                    return
+                                }
+                                if (_.isEmpty(doc)) {
+                                    Donor.findOne({ email: req.session.work.email }, function (err, doc) {
+                                        if (err) {
+                                            console.log(err, 'error')
+                                            res.redirect('/')
+                                            return
+                                        }
+                                        else {
+                                            Donor.update({ email: req.session.work.email }, { logo: userpath }, function (err, writeOpResult) {
+                                                if (err) {
+                                                    console.log(err.message, 'error')
+                                                    return
+                                                }
+                                                req.session.work.logo = userpath;
+                                                res.redirect('/main/welcome')
+                                            });
+
+                                        }
+                                    })
+                                }
+                                else {
+                                    Volunteer.update({ email: req.session.work.email }, { logo: userpath }, function (err, writeOpResult) {
+                                        if (err) {
+                                            console.log(err.message, 'error')
+                                            return
+                                        }
+                                        req.session.work.logo = userpath;
+                                        res.redirect('/main/welcome')
+                                    });
+                                }
+                            })
+                        }
+                        else {
+                            Member.update({ email: req.session.work.email }, { logo: userpath }, function (err, writeOpResult) {
+                                if (err) {
+                                    console.log(err.message, 'error')
+                                    return
+                                }
+                                req.session.work.logo = userpath;
+                                res.redirect('/main/welcome')
+                            });
+
+                        }
+                    })
+                }
+                else {
+                    Gov.update({ email: req.session.work.email }, { logo: userpath }, function (err, writeOpResult) {
+                        if (err) {
+                            console.log(err.message, 'error')
+                            return
+                        }
+                        req.session.work.logo = userpath;
+                        res.redirect('/main/welcome')
+                    });
+                }
+            })
+        }
+        else {
+            User.update({ email: req.session.work.email }, { logo: userpath }, function (err, writeOpResult) {
+                if (err) {
+                    console.log(err.message, 'error')
+                    return
+                }
+                req.session.work.logo = userpath;
+                res.redirect('/main/welcome')
+            });
+        }
+    })
 })
 router.get("/manyimagesupload", checkLogIn, (req, res) => {
     res.render("manyimages")
@@ -2862,14 +2949,105 @@ router.post('/manyimagesupload', uploadImagesHandler, uploadimages , urlencodedP
         
         arr.push(userpath);
     }
-    User.update({ email: req.session.work.email }, {images:arr}, function (err, writeOpResult) {
+    User.findOne({ email: req.session.work.email }, function (err, doc) {
         if (err) {
-            console.log(err.message, 'error')
+            console.log(err, 'error')
+            res.redirect('/')
             return
         }
-        
-        res.redirect('/main/welcome')
-    });
+        if (_.isEmpty(doc)) {
+            Gov.findOne({ email: req.session.work.email}, function (err, doc) {
+                if (err) {
+                    console.log(err, 'error')
+                    res.redirect('/')
+                    return
+                }
+                if (_.isEmpty(doc)) {
+                    Member.findOne({ email: req.session.work.email }, function (err, doc) {
+                        if (err) {
+                            console.log(err, 'error')
+                            res.redirect('/')
+                            return
+                        }
+                        if (_.isEmpty(doc)) {
+                            Volunteer.findOne({ email: req.session.work.email }, function (err, doc) {
+                                if (err) {
+                                    console.log(err, 'error')
+                                    res.redirect('/')
+                                    return
+                                }
+                                if (_.isEmpty(doc)) {
+                                    Donor.findOne({ email: req.session.work.email }, function (err, doc) {
+                                        if (err) {
+                                            console.log(err, 'error')
+                                            res.redirect('/')
+                                            return
+                                        }
+                                        else {
+                                            Donor.update({ email: req.session.work.email }, { images: arr }, function (err, writeOpResult) {
+                                                if (err) {
+                                                    console.log(err.message, 'error')
+                                                    return
+                                                }
+
+                                                res.redirect('/main/welcome')
+                                            });
+
+                                        }
+                                    })
+                                }
+                                else {
+                                    Volunteer.update({ email: req.session.work.email }, { images: arr }, function (err, writeOpResult) {
+                                        if (err) {
+                                            console.log(err.message, 'error')
+                                            return
+                                        }
+
+                                        res.redirect('/main/welcome')
+                                    });
+
+                                }
+                            })
+                        }
+                        else {
+                            Member.update({ email: req.session.work.email }, { images: arr }, function (err, writeOpResult) {
+                                if (err) {
+                                    console.log(err.message, 'error')
+                                    return
+                                }
+
+                                res.redirect('/main/welcome')
+                            });
+
+                        }
+                    })
+                }
+                else {
+                    Gov.update({ email: req.session.work.email }, { images: arr }, function (err, writeOpResult) {
+                        if (err) {
+                            console.log(err.message, 'error')
+                            return
+                        }
+
+                        res.redirect('/main/welcome')
+                    });
+
+                }
+            })
+        }
+        else {
+            User.update({ email: req.session.work.email }, { images: arr }, function (err, writeOpResult) {
+                if (err) {
+                    console.log(err.message, 'error')
+                    return
+                }
+
+                res.redirect('/main/welcome')
+            });
+
+        }
+    })
+
 })
 router.get('/loginadmin',(req,res)=>{
     res.render('login')
