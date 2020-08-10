@@ -27,7 +27,7 @@ var storage = multer({
 
 var receiptno=0
 const nodemailer = require('nodemailer');
-var singleupload = multer({ storage: storage }).single('file')
+var singleupload = multer.diskStorage({ storage: storage }).single('file')
 var bodyParser = require("body-parser")
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 router.use(session({ secret: 'keyboard cat', cookie: { maxAge: 1160000 } }))
