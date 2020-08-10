@@ -24,6 +24,7 @@ var storage = multer({
         cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
     }
 });
+
 var receiptno=0
 const nodemailer = require('nodemailer');
 var singleupload = multer({ storage: storage }).single('file')
