@@ -15,7 +15,15 @@ var session = require('express-session')
 var _ = require("lodash")
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
+require('dotenv').config();
 var multer = require('multer')
+const cloudinary = require('cloudinary')
+cloudinary.config({
+    cloud_name :process.env.CLOUD_NAME ,
+    api_key : process.env.API_ID,
+    api_secret : process.env.API_SECRET
+
+})
 var path = require('path')
 const cryto = require("crypto");
 var storage = multer.diskStorage({
@@ -38,7 +46,6 @@ const doc = new pdfDocument();
 const fast2sms = require('fast-two-sms')
 const uniqid = require('uniqid');
 // var popupS = require('popups');
-require('dotenv').config();
 
 const cfSdk = require('cashfree-sdk');
 
@@ -190,6 +197,7 @@ const filter = function (req, file, cb) {
       cb(null, true)
     } else {
       cb(new Error("Not an Image! Please upload an image"), false)
+      return
     }
 }
 
@@ -203,16 +211,13 @@ const filter = function (req, file, cb) {
 //     })
 
 const upload = multer({
-
-    dest: function (req, file, cb) {
-        cb(null, "./public/uploads/")
-      },
-      filename: (req, file, cb) => {
-          cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
-    },
+    storage : multer.diskStorage({
+        filename: (req, file, cb) => {
+            cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
+    }
+}),
     fileFilter: filter
-  })
-
+})
   
   let multiImageHandler = upload.fields([{
     name: "regcert", maxCount: 1
@@ -2837,8 +2842,9 @@ router.get('/infovol',(req,res)=>
 router.get("/imageupload", checkLogIn, (req, res) => {
     res.render("upload")
 })
-router.post('/imageupload', uploadLogoHandler, uploadlogo , urlencodedParser, checkLogIn, (req, res) => {
-    const userpath = req.files.logo[0].path.split("\\").splice(1).join("/");
+router.post('/imageupload', uploadLogoHandler, uploadlogo , urlencodedParser, checkLogIn, async(req, res) => {
+    //const userpath = req.files.logo[0].path.split("\\").splice(1).join("/");
+    const result = await cloudinary.v2.uploader.upload(req.files.logo[0].path)
     User.findOne({ email: req.session.work.email }, function (err, doc) {
         if (err) {
             console.log(err, 'error')
@@ -2874,12 +2880,12 @@ router.post('/imageupload', uploadLogoHandler, uploadlogo , urlencodedParser, ch
                                             return
                                         }
                                         else {
-                                            Donor.update({ email: req.session.work.email }, { logo: userpath }, function (err, writeOpResult) {
+                                            Donor.update({ email: req.session.work.email }, { logo: result.secure_url }, function (err, writeOpResult) {
                                                 if (err) {
                                                     console.log(err.message, 'error')
                                                     return
                                                 }
-                                                req.session.work.logo = userpath;
+                                                req.session.work.logo = result.secure_url;
                                                 res.redirect('/main/welcome')
                                             });
 
@@ -2887,24 +2893,24 @@ router.post('/imageupload', uploadLogoHandler, uploadlogo , urlencodedParser, ch
                                     })
                                 }
                                 else {
-                                    Volunteer.update({ email: req.session.work.email }, { logo: userpath }, function (err, writeOpResult) {
+                                    Volunteer.update({ email: req.session.work.email }, { logo: result.secure_url }, function (err, writeOpResult) {
                                         if (err) {
                                             console.log(err.message, 'error')
                                             return
                                         }
-                                        req.session.work.logo = userpath;
+                                        req.session.work.logo = result.secure_url;
                                         res.redirect('/main/welcome')
                                     });
                                 }
                             })
                         }
                         else {
-                            Member.update({ email: req.session.work.email }, { logo: userpath }, function (err, writeOpResult) {
+                            Member.update({ email: req.session.work.email }, { logo: result.secure_url }, function (err, writeOpResult) {
                                 if (err) {
                                     console.log(err.message, 'error')
                                     return
                                 }
-                                req.session.work.logo = userpath;
+                                req.session.work.logo = result.secure_url;
                                 res.redirect('/main/welcome')
                             });
 
@@ -2912,24 +2918,24 @@ router.post('/imageupload', uploadLogoHandler, uploadlogo , urlencodedParser, ch
                     })
                 }
                 else {
-                    Gov.update({ email: req.session.work.email }, { logo: userpath }, function (err, writeOpResult) {
+                    Gov.update({ email: req.session.work.email }, { logo: result.secure_url }, function (err, writeOpResult) {
                         if (err) {
                             console.log(err.message, 'error')
                             return
                         }
-                        req.session.work.logo = userpath;
+                        req.session.work.logo = result.secure_url;
                         res.redirect('/main/welcome')
                     });
                 }
             })
         }
         else {
-            User.update({ email: req.session.work.email }, { logo: userpath }, function (err, writeOpResult) {
+            User.update({ email: req.session.work.email }, { logo: result.secure_url }, function (err, writeOpResult) {
                 if (err) {
                     console.log(err.message, 'error')
                     return
                 }
-                req.session.work.logo = userpath;
+                req.session.work.logo =result.secure_url;
                 res.redirect('/main/welcome')
             });
         }
@@ -2938,15 +2944,16 @@ router.post('/imageupload', uploadLogoHandler, uploadlogo , urlencodedParser, ch
 router.get("/manyimagesupload", checkLogIn, (req, res) => {
     res.render("manyimages")
 })
-router.post('/manyimagesupload', uploadImagesHandler, uploadimages , urlencodedParser, checkLogIn, (req, res) => {
+router.post('/manyimagesupload', uploadImagesHandler, uploadimages , urlencodedParser, checkLogIn, async(req, res) => {
     // console.log(req.files);
     let arr = req.session.work.images;
     let userpath = "";
     for(var i = 0 ; i < req.files.images.length ;i++)
     {
 
-        userpath = req.files.images[0].path.split("\\").splice(1).join("/");
-        
+       // userpath = req.files.images[0].path.split("\\").splice(1).join("/");
+        let result = await cloudinary.v2.uploader.upload(req.files.images[0].path);
+        userpath = result.secure_url;
         arr.push(userpath);
     }
     User.findOne({ email: req.session.work.email }, function (err, doc) {
