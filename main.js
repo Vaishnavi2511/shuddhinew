@@ -313,7 +313,11 @@ router.get("/gallery",function(req,res){
   router.get('/registerngo', (req, res) => {
   res.render('regngo')
 })
-  router.post('/registerngo', multiImageHandler, uploadFile,urlencodedParser, function (req, res) {
+  router.post('/registerngo', multiImageHandler, uploadFile,urlencodedParser, async function (req, res) {
+    const userpath1 =  await cloudinary.v2.uploader.upload(req.files.regcert[0].path);
+    const userpath2 = await cloudinary.v2.uploader.upload(req.files.cert12a[0].path);
+    const userpath3 = await cloudinary.v2.uploader.upload(req.files.cert80g[0].path);
+    const userpath4 = await cloudinary.v2.uploader.upload(req.files.fcra[0].path);
       User.findOne({ email: req.body.email }, function (err, doc) {
         if (err) {
             console.log(err, 'error')
@@ -321,10 +325,10 @@ router.get("/gallery",function(req,res){
             return
         }
       if(_.isEmpty(doc)) {
-        const userpath1 = req.files.regcert[0].path.split("\\").splice(1).join("/");
+       /* const userpath1 = req.files.regcert[0].path.split("\\").splice(1).join("/");
         const userpath2 = req.files.cert12a[0].path.split("\\").splice(1).join("/");
         const userpath3 = req.files.cert80g[0].path.split("\\").splice(1).join("/");
-        const userpath4 = req.files.fcra[0].path.split("\\").splice(1).join("/");
+        const userpath4 = req.files.fcra[0].path.split("\\").splice(1).join("/");*/
         
       let newUser = new User();
       if(req.body.password !=req.body.confirmPassword)
@@ -333,10 +337,10 @@ router.get("/gallery",function(req,res){
       }
       newUser.name = req.body.name;
       newUser.regid = req.body.regid;
-      newUser.regcert = userpath1;
-      newUser.cert12a =userpath2;
-      newUser.cert80g =userpath3;
-      newUser.fcra = userpath4;
+      newUser.regcert = userpath1.secure_url;
+      newUser.cert12a =userpath2.secure_url;
+      newUser.cert80g =userpath3.secure_url;
+      newUser.fcra = userpath4.secure_url;
       newUser.acname = req.body.acname;
       newUser.acno = req.body.acno;
       newUser.ifsccode = req.body.ifsccode;
